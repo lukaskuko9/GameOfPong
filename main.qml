@@ -65,6 +65,9 @@ Window {
             player1.x = gameWindow.x;
             player2.x = gameWindow.width - 2*player2.width;
 
+            player1.y = gameWindow.height /2 - player1.height/2
+            player2.y = gameWindow.height /2 - player2.height/2
+
             if(player !== undefined)
                 player.score++;
         }
