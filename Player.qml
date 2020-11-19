@@ -24,14 +24,18 @@ Rectangle{
     Timer{
         repeat: true;
         running : isAi && gameWindow.isGameRunning();
-        interval: 200
+        interval: 100
         onTriggered: {
 
+            if(ball.y < player.y  || ball.y + ball.height + player.movement> player.y + player.height - player.movement)
+            {
+                var precisionDivider = 1;
                 var half = player.y + player.height/2; //player vertical middle point
-                     if(half - player.movement < ball.y + ball.height/2)
+                     if(half - player.movement/precisionDivider < ball.y + ball.height/2)
                     player.moveDown();
-                else if(half + player.movement > ball.y + ball.height/2)
+                else if(half + player.movement/precisionDivider > ball.y + ball.height/2)
                     player.moveUp();
+            }
         }
     }
 

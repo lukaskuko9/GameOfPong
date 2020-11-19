@@ -84,6 +84,7 @@ Window {
                 color: "blue";
                 moveUpKey: Qt.Key_W;
                 moveDownKey: Qt.Key_S;
+                isAi: false;
             }
 
             Player{
