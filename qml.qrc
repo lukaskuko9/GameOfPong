@@ -2,5 +2,7 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>settingsMenu.qml</file>
+        <file>Player.qml</file>
+        <file>Ball.qml</file>
     </qresource>
 </RCC>
