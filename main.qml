@@ -5,12 +5,13 @@ import Qt.labs.settings 1.0
 
 Window {
     id:mainWindow
-    width: 1024; height: 680
 
-    minimumWidth: (gameWindow.isGameRunning()? width : 640);
-    minimumHeight: (gameWindow.isGameRunning()? height : 480);
-    maximumWidth: (gameWindow.isGameRunning()? width : 1920);
-    maximumHeight: (gameWindow.isGameRunning()? height : 1080);
+   // flags: gameWindow.isGameRunning() ?  WindowMinimizeButtonHint : Qt.Window
+
+    minimumHeight : 480;
+    minimumWidth : 640;
+
+
     visible: true
     title: qsTr("Game of Pong")
 
@@ -59,14 +60,16 @@ Window {
         function endGame(player) {
             ball.reset();
 
-            ball.x = gameWindow.width / 2;
-            ball.y = gameWindow.height /2 ;
+            ball.x = gameWindow.width / 2 - ball.width/2;
+            ball.y = gameWindow.height /2 - ball.height/2;
 
-            player1.x = gameWindow.x;
-            player2.x = gameWindow.width - 2*player2.width;
+            player1.y = gameWindow.height /2 - player1.height/2;
+            player2.y = gameWindow.height /2 - player2.height/2;
 
-            player1.y = gameWindow.height /2 - player1.height/2
-            player2.y = gameWindow.height /2 - player2.height/2
+            mainWindow.maximumHeight = 3000;
+            mainWindow.maximumWidth = 3000;
+            mainWindow.minimumHeight = 480;
+            mainWindow.minimumWidth = 640;
 
             if(player !== undefined)
                 player.score++;
@@ -74,6 +77,11 @@ Window {
 
         function startGame(){
             ball.ballTimer.running = true;
+            mainWindow.maximumWidth = mainWindow.width;
+            mainWindow.minimumHeight = mainWindow.height;
+            mainWindow.minimumWidth = mainWindow.width;
+            mainWindow.maximumHeight = mainWindow.height;
+
         }
 
         function isGameRunning() {
@@ -96,7 +104,7 @@ Window {
                 color: "red";
                 moveUpKey: Qt.Key_Up;
                 moveDownKey: Qt.Key_Down;
-                isAi: true;
+                isAi: false;
             }
 
             Keys.forwardTo: [player1, player2]
@@ -125,94 +133,39 @@ Window {
 
             property var settingsMenu : null;
 
-            Component.onCompleted: {
-               /* var component = Qt.createComponent("qrc:/settingsMenu.qml");
-                if (component.status === Component.Ready) {
-                    var settingsMenu = component.createObject(gameWindow);
-                    settingsMenu.x = gameWindow.width/2 - gameWindow.x*2;
-                    settingsMenu.y = gameWindow.height/2 - gameWindow.y*2;
-                   // settingsMenu.en = true;
-                    menu.settingsMenu = component;
-
-                }*/
-            }
-
             ColumnLayout{
                 spacing: 10;
-                Rectangle {
-                    Layout.alignment: Qt.AlignCenter
-                    color: "steelblue"
-                    Layout.preferredWidth: 100
-                    Layout.preferredHeight: 50
-                    opacity: 0.9
-
-                    Text{
-                        text: "Start Game"
-                        font.bold: true;
-                        anchors.centerIn: parent
+                CustomMenuItem {
+                    text: "Start Game"
+                    mouseArea.onClicked:{
+                        gameWindow.endGame();
+                        gameWindow.startGame();
                     }
-
-                    MouseArea{
-                        anchors.fill: parent;
-                        onClicked:
-                        {
-                            gameWindow.endGame();
-                            gameWindow.startGame();
-                        }
-                    }
-                }
-
-                Rectangle {
-                    Layout.alignment: Qt.AlignCenter
-                    color: "steelblue"
-                    Layout.preferredWidth: 100
-                    Layout.preferredHeight: 50
-                    opacity: 0.9
-
-                    Text{
-                        text: "Settings"
-                        font.bold: true;
-                        anchors.centerIn: parent
-                    }
-
-                    MouseArea{
-                        anchors.fill: parent;
-                        hoverEnabled: true
-                        onClicked: {
-                            var component = Qt.createComponent("qrc:/settingsMenu.qml");
-                            if (component.status === Component.Ready) {
-                                var settingsMenu = component.createObject(gameWindow);
-                                settingsMenu.x = gameWindow.width/2 - gameWindow.x*2;
-                                settingsMenu.y = gameWindow.height/2 - gameWindow.y*2;
-                                settingsMenu.visible = true;
-                                menu.visible = false;
-                               // menu.settingsMenu = component;
-
-                            }
-                        }
-                    }
-
 
                 }
 
-                Rectangle {
-                    Layout.alignment: Qt.AlignCenter
-                    color: "steelblue"
-                    Layout.fillHeight: true; Layout.fillWidth: true;
-                    Layout.preferredWidth: 100
-                    Layout.preferredHeight: 50
-                    opacity: 0.9
+                CustomMenuItem {
+                    text: "Settings"
+                    mouseArea.onClicked: {
+                        /*
+                        var component = Qt.createComponent("qrc:/settingsMenu.qml");
+                        if (component.status === Component.Ready) {
+                            var settingsMenu = component.createObject(gameWindow);
+                            settingsMenu.x = gameWindow.width/2 - gameWindow.x*2;
+                            settingsMenu.y = gameWindow.height/2 - gameWindow.y*2;
+                            settingsMenu.visible = true;
+                            menu.visible = false;
+                           // menu.settingsMenu = component;
 
-                    Text{
-                        text: "Quit"
-                        font.bold: true;
-                        anchors.centerIn: parent
-                    }
+                        }
 
-                    MouseArea{
-                        anchors.fill: parent;
-                        onClicked: Qt.quit();
+                        */
                     }
+                }
+
+                CustomMenuItem {
+                    text: "Quit"
+                    mouseArea.onClicked: Qt.quit();
                 }
             }
 
