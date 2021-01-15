@@ -52,7 +52,7 @@ Rectangle {
                     color: combobox.highlightedIndex === index ? colorSelected : colorDefault
                     border.width: 1
                 }
-                text: combobox.textRole ? (Array.isArray(combobox.model) ? modelData[combobox.textRole] : model[combobox.textRole]) : modelData
+                text: modelData
                 highlighted: combobox.highlightedIndex === index
                 hoverEnabled: combobox.hoverEnabled
             }
