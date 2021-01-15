@@ -10,7 +10,7 @@ Rectangle {
     property string colorSelected : "goldenrod"
     property string colorDefault: "gold"
 
-    property bool isPC: combobox.currentText == pc;
+    property bool isPC: combobox.currentIndex == 1;
 
     property string player: "Player"
     property string pc: "PC"

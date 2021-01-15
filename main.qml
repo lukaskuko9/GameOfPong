@@ -152,10 +152,11 @@ Window {
                     spacing: 4
                     CustomMenuComboBox {
                         id: player1_combobox
-                        //selectedItem: "PC"
+                        selectedItem: settings.player1_isPC ? "PC" : "Player"
                     }
                     CustomMenuComboBox {
                         id: player2_combobox
+                        selectedItem: settings.player2_isPC ? "PC" : "Player"
                     }
                 }
 
