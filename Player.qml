@@ -8,7 +8,7 @@ Rectangle{
     focus: true;
     radius: 180
 
-    property bool isAi: false
+    property bool isPC: false
     property int score : 0;
     property int moveUpKey;
     property int moveDownKey;
@@ -23,7 +23,7 @@ Rectangle{
 
     Timer{
         repeat: true;
-        running : isAi && gameWindow.isGameRunning();
+        running : isPC && gameWindow.isGameRunning();
         interval: 100
         onTriggered: {
 
@@ -60,7 +60,7 @@ Rectangle{
             return;
 
         event.accepted = false;
-        if(!isAi)
+        if(!isPC)
         {
             switch(event.key)
             {

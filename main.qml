@@ -11,13 +11,15 @@ Window {
     minimumHeight : 480;
     minimumWidth : 640;
 
-
     visible: true
     title: qsTr("Game of Pong")
 
     Settings {
+        id: settings
         property alias width: mainWindow.width
         property alias height: mainWindow.height
+        property alias player1_isPC: player1_combobox.isPC
+        property alias player2_isPC: player2_combobox.isPC
     }
 
     Rectangle{
@@ -95,7 +97,7 @@ Window {
                 color: "blue";
                 moveUpKey: Qt.Key_W;
                 moveDownKey: Qt.Key_S;
-                isAi: false;
+                isPC: player1_combobox.isPC;
             }
 
             Player{
@@ -104,7 +106,7 @@ Window {
                 color: "red";
                 moveUpKey: Qt.Key_Up;
                 moveDownKey: Qt.Key_Down;
-                isAi: false;
+                isPC: player2_combobox.isPC;
             }
 
             Keys.forwardTo: [player1, player2]
@@ -127,14 +129,16 @@ Window {
         //menu
         Item{
             id:menu;
-            x: gameWindow.width/2 - gameWindow.x*2
-            y: gameWindow.height/2 - gameWindow.y*2
+            x: gameWindow.width/2 - menuLayout.width/2
+            y: gameWindow.height/2 - menuLayout.height/2
             visible: !gameWindow.isGameRunning();
 
             property var settingsMenu : null;
 
             ColumnLayout{
-                spacing: 10;
+                id: menuLayout
+                spacing: 6;
+
                 CustomMenuItem {
                     text: "Start Game"
                     mouseArea.onClicked:{
@@ -144,10 +148,23 @@ Window {
 
                 }
 
-                CustomMenuItem {
+                RowLayout{
+                    spacing: 4
+                    CustomMenuComboBox {
+                        id: player1_combobox
+                        //selectedItem: "PC"
+                    }
+                    CustomMenuComboBox {
+                        id: player2_combobox
+                    }
+                }
+
+                Item{ height: 4}
+
+                /*CustomMenuItem {
                     text: "Settings"
                     mouseArea.onClicked: {
-                        /*
+
                         var component = Qt.createComponent("qrc:/settingsMenu.qml");
                         if (component.status === Component.Ready) {
                             var settingsMenu = component.createObject(gameWindow);
@@ -159,9 +176,9 @@ Window {
 
                         }
 
-                        */
+
                     }
-                }
+                }*/
 
                 CustomMenuItem {
                     text: "Quit"

@@ -16,6 +16,8 @@ Rectangle {
     color: colorExited
     radius: 45;
     opacity: 0.9
+    border.color: "black"
+    border.width: 2
 
     Text{
         id: label
@@ -28,7 +30,15 @@ Rectangle {
         id: ma;
         anchors.fill: parent;
         hoverEnabled: true;
-        onEntered: item.color = colorEntered
-        onExited:  item.color = colorExited
+        onEntered: {
+         //   item.color = colorEntered;
+            animateColor.start()
+        }
+        onExited:  {
+            item.color = colorExited;
+            animateColor.stop()
+        }
     }
+
+    PropertyAnimation {id: animateColor; target: item; properties: "color"; to: colorEntered; duration: 250}
 }
