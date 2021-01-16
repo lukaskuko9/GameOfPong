@@ -1,7 +1,6 @@
 import QtQuick.Layouts 1.12
 import QtQuick 2.6
 import QtQuick.Controls 2.0
-import QtQuick.Controls.Styles 1.4
 
 Rectangle {
     id:item;
@@ -10,7 +9,7 @@ Rectangle {
     property string colorSelected : "goldenrod"
     property string colorDefault: "gold"
 
-    property bool isPC: combobox.currentIndex == 1;
+    property bool isPC: combobox.currentIndex === 1;
 
     property string player: "Player"
     property string pc: "PC"
@@ -27,7 +26,7 @@ Rectangle {
         id:combobox
         anchors.fill: parent;
         model: [ player, pc ]
-        currentIndex: selectedItem == player ? 0 : 1
+        currentIndex: selectedItem === player ? 0 : 1
         background: Rectangle {
                 anchors.fill: parent;
                 radius: 45;

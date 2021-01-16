@@ -1,6 +1,5 @@
 import QtQuick 2.0
 
-
 Rectangle{
     id:ball;
     property bool isMovingUp: false;
