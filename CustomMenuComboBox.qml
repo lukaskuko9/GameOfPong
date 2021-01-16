@@ -17,12 +17,8 @@ Rectangle {
 
     property var selectedItem : combobox.currentText;
 
-    Layout.alignment: Qt.AlignCenter
-    Layout.preferredWidth: 85
-    Layout.preferredHeight: 30
-
-
     ComboBox {
+
         id:combobox
         anchors.fill: parent;
         model: [ player, pc ]

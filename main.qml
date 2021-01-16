@@ -5,9 +5,6 @@ import Qt.labs.settings 1.0
 
 Window {
     id:mainWindow
-
-   // flags: gameWindow.isGameRunning() ?  WindowMinimizeButtonHint : Qt.Window
-
     minimumHeight : 480;
     minimumWidth : 640;
 
@@ -152,34 +149,23 @@ Window {
                     spacing: 4
                     CustomMenuComboBox {
                         id: player1_combobox
+                        Layout.minimumWidth: 95
+                        Layout.fillWidth: true
+                        Layout.alignment: Qt.AlignHCenter
+                        Layout.preferredHeight: 30
                         selectedItem: settings.player1_isPC ? "PC" : "Player"
                     }
                     CustomMenuComboBox {
                         id: player2_combobox
+                        Layout.minimumWidth: 95
+                        Layout.fillWidth: true
+                        Layout.alignment: Qt.AlignHCenter
+                        Layout.preferredHeight: 30
                         selectedItem: settings.player2_isPC ? "PC" : "Player"
                     }
                 }
 
-                Item{ height: 4}
-
-                /*CustomMenuItem {
-                    text: "Settings"
-                    mouseArea.onClicked: {
-
-                        var component = Qt.createComponent("qrc:/settingsMenu.qml");
-                        if (component.status === Component.Ready) {
-                            var settingsMenu = component.createObject(gameWindow);
-                            settingsMenu.x = gameWindow.width/2 - gameWindow.x*2;
-                            settingsMenu.y = gameWindow.height/2 - gameWindow.y*2;
-                            settingsMenu.visible = true;
-                            menu.visible = false;
-                           // menu.settingsMenu = component;
-
-                        }
-
-
-                    }
-                }*/
+                Item{ height: 4} //spacing
 
                 CustomMenuItem {
                     text: "Quit"
