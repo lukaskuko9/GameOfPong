@@ -20,10 +20,10 @@ Rectangle{
         }
     }
 
-    Timer{
+    Timer{ //ai moving
         repeat: true;
         running : isPC && gameWindow.isGameRunning();
-        interval: 80
+        interval: 150
         onTriggered: {
 
             if(ball.y < player.y  || ball.y + ball.height + player.movement> player.y + player.height - player.movement)
