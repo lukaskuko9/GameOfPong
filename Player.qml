@@ -23,15 +23,15 @@ Rectangle{
     Timer{ //ai moving
         repeat: true;
         running : isPC && gameWindow.isGameRunning();
-        interval: 150
+        interval: 100
         onTriggered: {
 
-            if(ball.y < player.y  || ball.y + ball.height + player.movement> player.y + player.height - player.movement)
+            if(ball.y - player.movement < player.y  || ball.y + ball.height + player.movement > player.y + player.height)
             {
                 var half = player.y + player.height/2; //player vertical middle point
-                     if(half - player.movement < ball.y + ball.height/2)
+                     if(half < ball.y)
                     player.moveDown();
-                else if(half + player.movement > ball.y + ball.height/2)
+                else if(half > ball.y)
                     player.moveUp();
             }
         }

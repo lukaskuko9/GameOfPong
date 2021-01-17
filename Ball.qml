@@ -1,4 +1,4 @@
-import QtQuick 2.6
+import QtQuick 2
 
 Rectangle{
     id:ball;
@@ -7,12 +7,14 @@ Rectangle{
 
     property alias ballTimer: ballTimer;
 
-    property int speedMultiplier: 40
-    property int horMove: speedMultiplier;
-    property int vertMove: speedMultiplier;
+    property int initialSpeed: 50
+
+    property real speed: initialSpeed
+    property real horMove: initialSpeed
+    property real vertMove: initialSpeed
 
 
-    property int animSpeed: 240
+    readonly property int animSpeed: 100
 
     property Player player1;
     property Player player2;
@@ -24,53 +26,64 @@ Rectangle{
 
     signal gameEnd(Player player)
 
-    Behavior on x{
-        NumberAnimation {
-            duration: animSpeed
-            easing.type: Easing.Linear
-        }
-    }
-    Behavior on y{
-        NumberAnimation {
-            duration: animSpeed*2
-            easing.type: Easing.Linear
-        }
-    }
-
+    Behavior on x { NumberAnimation { easing { type: Easing.Linear } } }
+    Behavior on y { NumberAnimation { easing { type: Easing.Linear } } }
     Timer {
         id: ballTimer
         interval: animSpeed
         repeat: true
         running: false
+
         onTriggered: {
-            ball.x += (ball.isMovingLeft) ? -ball.horMove : ball.horMove;
-            ball.y += (ball.isMovingUp)   ? -ball.vertMove : ball.vertMove;
+
+           ball.x += (ball.isMovingLeft) ? -ball.horMove : ball.horMove;
+           ball.y += (ball.isMovingUp)   ? -ball.vertMove : ball.vertMove;
         }
     }
 
     onXChanged: {
         if(ballTimer.running)
         {
-            var player = ball.player1
+            // ball goes right
+            var player = ball.player2
 
-            if(!ball.isMovingLeft)
-                player = ball.player2
+            var dist = Math.abs(ball.x + ball.width - player.x)
 
-            var horMove = (isMovingLeft) ? - ball.horMove : ball.horMove;
 
-            if(ball.x + horMove -ball.width/2<= player.x &&
-               ball.x + horMove +ball.width/2>= player.x) //horizontal detection
+            if(ball.isMovingLeft)
+            {
+                player = ball.player1
+                dist = Math.abs(ball.x - player.width - player.x)
+            }
+            var detOffset = ball.width / 4
+
+            var horizontalDetection = dist <= detOffset
+
+            if(dist <= detOffset)
+                console.log("player dist: " + dist)
+
+            if(horizontalDetection)
             {
                 var vertMove = (isMovingUp) ? - ball.vertMove : ball.vertMove;
 
-                if(ball.y + vertMove >= player.y &&                  //bottom player point
-                   ball.y + vertMove <= player.y + player.height //top player point
+                if(ball.y + vertMove + ball.height/2>= player.y &&                  //bottom player point
+                                   ball.y + vertMove + ball.height/2<= player.y + player.height //top player point
                 ) //vertical detection
                 {
                     var pHalf = player.y + player.height/2; //player vertical middle point
-                    var speed = ball.y - pHalf; //the further the ball is from middle of the player, the faster vertical speed
-                    ball.vertMove = Math.abs((speed/100)*ball.speedMultiplier); //calc vertical speed
-                    ball.horMove = 1.1*ball.speedMultiplier - ball.vertMove;
+                    var diff = ball.y - pHalf; //the further the ball is from middle of the player, the faster vertical speed
+                    var seed = diff/100
+
+                    if(seed > 3/4)
+                        seed = 3/4
+
+                    if(speed <= 60)
+                        speed++
+
+                    ball.vertMove = 1.5*Math.abs(seed*ball.speed); //calc percentage
+                    ball.horMove = 1.5*ball.speed - ball.vertMove;
+
+                    console.log(ball.horMove + " " + ball.vertMove)
 
                     ball.isMovingLeft = !ball.isMovingLeft;
                     ball.isMovingUp = ball.y <= pHalf;
@@ -87,17 +100,20 @@ Rectangle{
     onYChanged: {
         if(ballTimer.running)
         {
-            var barYpos =  gameWindow.y - gameWindow.anchors.margins;
-            var vertMove = (isMovingUp) ? - ball.vertMove : ball.vertMove;
+            var topbarYpos =  gameWindow.y - gameWindow.anchors.margins;
+            var topbardist = topbarYpos - ball.y
 
-            if(ball.y + vertMove <= barYpos - ball.height/2) //top bar detection
+            var bottombarYpos =  topbarYpos + gameWindow.height - gameWindow.anchors.margins;
+            var bottombardist = bottombarYpos - ball.y
+
+            if(topbardist <= 0 && topbardist >= -ball.height/2) //top bar detection
             {
-                ball.y = barYpos - ball.height/2;
+                console.log("top bar: " + topbardist)
                 isMovingUp = false;
             }
-            else if(ball.y + vertMove >= barYpos - ball.height/2 + gameWindow.height) //bottom bar detection
+            else if(bottombardist <= 0 && bottombardist >= -ball.height/2) //bottom bar detection
             {
-                ball.y = barYpos - ball.height/2 + gameWindow.height
+                console.log("bottom bar: " + bottombardist)
                 isMovingUp = true;
             }
         }
@@ -108,15 +124,16 @@ Rectangle{
         ball.ballTimer.running = false;
         ball.isMovingUp = Math.random() <= 0.5;
         ball.isMovingLeft = Math.random() <= 0.5;
+        ball.speed = ball.initialSpeed
+        ball.horMove = ball.initialSpeed
+        ball.vertMove = ball.initialSpeed
+        var seed = Math.random()
+        if(seed > 2/3)
+            seed = 2/3
 
+        //ball.vertMove = Math.abs(seed*ball.speedMultiplier); //calc percentage
+        //ball.horMove = Math.abs(ball.speedMultiplier - ball.vertMove);
 
-        do{
-            var seed = Math.random()
-            ball.vertMove = Math.abs(seed*ball.speedMultiplier); //calc percentage
-            ball.horMove = Math.abs(ball.speedMultiplier - ball.vertMove);
-        }
-        while(ball.horMove < ball.speedMultiplier/2) //ensures at least half of total speed goes to horizontal speed
-        console.log(ball.horMove + " " + ball.vertMove)
         //ball.horMove = speedMultiplier;
         //ball.vertMove = horMove;
     }
