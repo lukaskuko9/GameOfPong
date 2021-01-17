@@ -7,14 +7,15 @@ Rectangle{
 
     property alias ballTimer: ballTimer;
 
-    property int initialSpeed: 60
+    property int initialSpeed: 100
+    readonly property int maxSpeed: 160
 
     property real speed: initialSpeed
     property real horMove: initialSpeed
     property real vertMove: initialSpeed
 
 
-    readonly property int animSpeed: 100
+    readonly property int animSpeed: 50
 
     property Player player1;
     property Player player2;
@@ -77,7 +78,7 @@ Rectangle{
                         seed = 2/3
                     }
 
-                    if(speed <= 150)
+                    if(speed <= maxSpeed)
                         speed++
 
                     console.log("speed"+ speed)
@@ -108,25 +109,16 @@ Rectangle{
             var bottombarYpos =  topbarYpos + gameWindow.height - gameWindow.anchors.margins;
             var bottombardist = bottombarYpos - ball.y
 
-            if(topbardist <= 0 && topbardist >= -ball.height/4) //top bar detection
+            if((topbardist <= 0 && topbardist >= -ball.height/4) //top bar detection
+                || (topbardist>ball.height && topbardist >= 0) //possible bug prevention
+            )
             {
-                //console.log("top bar: " + topbardist)
-                isMovingUp = false;
-            }
-            else if(topbardist>ball.height)
-            {
-                console.log("bug fix (top)")
                 isMovingUp = false;
             }
 
-            else if(bottombardist <= 0 && bottombardist >= -ball.height/4) //bottom bar detection
+            else if((bottombardist <= 0 && bottombardist >= -ball.height/4) //bottom bar detection
+                || (bottombardist < ball.height && bottombardist <= 0))
             {
-                //console.log("bottom bar: " + bottombardist)
-                isMovingUp = true;
-            }
-            else if(bottombardist < ball.height)
-            {
-                console.log("bug fix (bottom)")
                 isMovingUp = true;
             }
 
@@ -139,8 +131,8 @@ Rectangle{
         ball.isMovingUp = Math.random() <= 0.5;
         ball.isMovingLeft = Math.random() <= 0.5;
         ball.speed = ball.initialSpeed
-        ball.horMove = ball.initialSpeed
-        ball.vertMove = ball.initialSpeed
+        ball.horMove = ball.initialSpeed/2
+        ball.vertMove = ball.initialSpeed/2
 
         var seed = Math.random()
         if(seed > 2/3)

@@ -23,7 +23,7 @@ Rectangle{
     Timer{ //ai moving
         repeat: true;
         running : isPC && gameWindow.isGameRunning();
-        interval: 100
+        interval: 125 //response time
         onTriggered: {
 
             if(ball.y - player.movement < player.y  || ball.y + ball.height + player.movement > player.y + player.height)
