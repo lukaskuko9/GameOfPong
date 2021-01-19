@@ -64,29 +64,30 @@ Rectangle{
                 var ballTopPoint    = ball.y
                 var ballBottomPoint = ball.y + ball.height
 
-                if(ballBottomPoint + detOffset   >= player.y                     //top player point
-                && ballTopPoint    - detOffset   <= player.y + player.height     //bottom player point
+                if(ballBottomPoint + detOffset   >= player.y &&                  //top player point
+                   ballTopPoint    - detOffset   <= player.y + player.height     //bottom player point
                 ) //vertical detection
                 {
                     var pHalf = player.y + player.height/2; //player vertical middle point
                     var diff = Math.abs(ball.y - pHalf); //the further the ball is from middle of the player, the faster vertical speed
                     var seed = diff/100
 
-                    if(seed > 2/3)
+                    if(seed > 2/3) //make sure there is some horizontal speed as well
                     {
-                        console.log("seed"+ seed)
+                        console.log("seed: "+ seed)
                         seed = 2/3
                     }
 
                     if(speed <= maxSpeed)
-                        speed++
+                    {
+                        console.log("speed: "+ speed)
+                        speed++  
+                    }
 
-                    console.log("speed"+ speed)
+                    ball.vertMove = seed*ball.speed; //calc vertical speed
+                    ball.horMove = Math.abs(1-seed)*ball.speed; //distribute the rest of total speed to horizontal speed
 
-                    ball.vertMove = seed*ball.speed; //calc percentage
-                    ball.horMove = Math.abs(1-seed)*ball.speed;
-
-                    console.log(ball.horMove + " " + ball.vertMove)
+                    console.log("horizontal speed: " + ball.horMove + "\nvertical speed: " + ball.vertMove)
 
                     ball.isMovingLeft = !ball.isMovingLeft;
                     ball.isMovingUp = ball.y <= pHalf;
@@ -109,14 +110,14 @@ Rectangle{
             var bottombarYpos =  topbarYpos + gameWindow.height - gameWindow.anchors.margins;
             var bottombardist = bottombarYpos - ball.y
 
-            if((topbardist <= 0 && topbardist >= -ball.height/4) //top bar detection
+            if((topbardist <= 0 && topbardist >= -ball.height/2) //top bar detection
                 || (topbardist>ball.height && topbardist >= 0) //possible bug prevention
             )
             {
                 isMovingUp = false;
             }
 
-            else if((bottombardist <= 0 && bottombardist >= -ball.height/4) //bottom bar detection
+            else if((bottombardist <= 0 && bottombardist >= -ball.height/2) //bottom bar detection
                 || (bottombardist < ball.height && bottombardist <= 0))
             {
                 isMovingUp = true;
@@ -133,15 +134,5 @@ Rectangle{
         ball.speed = ball.initialSpeed
         ball.horMove = ball.initialSpeed/2
         ball.vertMove = ball.initialSpeed/2
-
-        var seed = Math.random()
-        if(seed > 2/3)
-            seed = 2/3
-
-        //ball.vertMove = Math.abs(seed*ball.speedMultiplier); //calc percentage
-        //ball.horMove = Math.abs(ball.speedMultiplier - ball.vertMove);
-
-        //ball.horMove = speedMultiplier;
-        //ball.vertMove = horMove;
     }
 }

@@ -31,7 +31,6 @@ Rectangle {
         anchors.fill: parent;
         hoverEnabled: true;
         onEntered: {
-         //   item.color = colorEntered;
             animateColor.start()
         }
         onExited:  {

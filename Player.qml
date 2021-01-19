@@ -20,13 +20,15 @@ Rectangle{
         }
     }
 
-    Timer{ //ai moving
+    Timer{ //pc moving
         repeat: true;
         running : isPC && gameWindow.isGameRunning();
-        interval: 125 //response time
+        interval: 150 //response time
         onTriggered: {
 
             if(ball.y - player.movement < player.y  || ball.y + ball.height + player.movement > player.y + player.height)
+                //if there is a need to move
+                //not really needed but it filters pc's trembling movement
             {
                 var half = player.y + player.height/2; //player vertical middle point
                      if(half < ball.y)
